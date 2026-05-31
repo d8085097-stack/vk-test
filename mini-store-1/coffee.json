@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "name": "Эфиопия Йиргачефф",
+    "price": 850,
+    "inStock": false,
+    "image": "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400&h=300&fit=crop",
+    "description": "Цветочный аромат с нотками жасмина и бергамота. Яркая кислотность.",
+    "rating": 4.9,
+    "roastLevel": "light",
+    "origin": "Эфиопия",
+    "flavor": "Цветочный, цитрусовый"
+  },
+  {
+    "id": 2,
+    "name": "Колумбия Супремо",
+    "price": 750,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=300&fit=crop",
+    "description": "Сбалансированный вкус с карамельными нотками и средней кислотностью.",
+    "rating": 4.7,
+    "roastLevel": "medium",
+    "origin": "Колумбия",
+    "flavor": "Карамель, орехи"
+  },
+  {
+    "id": 3,
+    "name": "Бразилия Сантос",
+    "price": 680,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=400&h=300&fit=crop",
+    "description": "Мягкий вкус с шоколадными нотками и низкой кислотностью.",
+    "rating": 4.5,
+    "roastLevel": "dark",
+    "origin": "Бразилия",
+    "flavor": "Шоколад, орехи"
+  },
+  {
+    "id": 4,
+    "name": "Кения АА",
+    "price": 950,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop",
+    "description": "Яркая кислотность с нотками черной смородины и грейпфрута.",
+    "rating": 4.4,
+    "roastLevel": "light",
+    "origin": "Кения",
+    "flavor": "Ягоды, цитрус"
+  },
+  {
+    "id": 5,
+    "name": "Гватемала Антигуа",
+    "price": 800,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=300&fit=crop",
+    "description": "Пряный вкус с нотками какао и дымка. Средняя кислотность.",
+    "rating": 4.7,
+    "roastLevel": "medium",
+    "origin": "Гватемала",
+    "flavor": "Специи, какао"
+  },
+  {
+    "id": 6,
+    "name": "Итальянская обжарка",
+    "price": 700,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop",
+    "description": "Классическая темная обжарка для эспрессо. Плотное тело, низкая кислотность.",
+    "rating": 4.5,
+    "roastLevel": "dark",
+    "origin": "Италия",
+    "flavor": "Горький шоколад"
+  },
+  {
+    "id": 7,
+    "name": "Коста-Рика Тарразу",
+    "price": 880,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop",
+    "description": "Чистый вкус с нотками меда и цитрусовых. Яркая кислотность.",
+    "rating": 4.8,
+    "roastLevel": "light",
+    "origin": "Коста-Рика",
+    "flavor": "Мед, лимон"
+  },
+  {
+    "id": 8,
+    "name": "Вьетнам Робуста",
+    "price": 550,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=400&h=300&fit=crop",
+    "description": "Крепкий кофе с высоким содержанием кофеина. Горький вкус.",
+    "rating": 4.3,
+    "roastLevel": "dark",
+    "origin": "Вьетнам",
+    "flavor": "Землистый, орех"
+  }
+]

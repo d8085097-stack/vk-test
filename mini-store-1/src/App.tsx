@@ -1,0 +1,209 @@
+import { useState, useEffect, useCallback } from 'react';
+import './styles.css';
+
+type CoffeeCardType = {
+  id: number;
+  name: string;
+  price: number;
+  inStock: boolean;
+  image: string;
+  description: string;
+  rating: number;
+  roastLevel: 'light' | 'medium' | 'dark';
+  origin: string;
+  flavor: string;
+};
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+export default function App() {
+  const [searchText, setSearchText] = useState<string>('');
+  const [filterInStock, setFilterInStock] = useState<boolean>(false);
+  const [roastLevel, setRoastLevel] = useState<string>('');
+  const [coffees, setCoffees] = useState<CoffeeCardType[]>([]);
+  const [selectedCoffee, setSelectedCoffee] = useState<CoffeeCardType | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCoffees = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`${API_URL}/coffee`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      const data: CoffeeCardType[] = await res.json();
+      setCoffees(data);
+    } catch (err) {
+      setError('Не удалось загрузить данные с сервера. Проверьте, запущен ли бэкенд.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCoffees();
+  }, [fetchCoffees]);
+
+  const filteredCoffees = coffees.filter((coffee) => {
+    const nameMatch = coffee.name.toLowerCase().includes(searchText.toLowerCase());
+    const stockMatch = filterInStock ? coffee.inStock : true;
+    const roastMatch = roastLevel ? coffee.roastLevel === roastLevel : true;
+    return nameMatch && stockMatch && roastMatch;
+  });
+
+  const handleSearchInput = (event: React.FormEvent<HTMLInputElement>): void => {
+    setSearchText(event.currentTarget.value);
+  };
+
+  const handleStockChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setFilterInStock(event.currentTarget.checked);
+  };
+
+  const handleRoastChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    setRoastLevel(event.currentTarget.value);
+  };
+
+  const closeModal = (): void => {
+    setSelectedCoffee(null);
+  };
+
+  const handleModalClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    if ((e.target as HTMLElement).className === 'modal') {
+      closeModal();
+    }
+  };
+
+  const getRoastLabel = (level: string): string => {
+    const labels = {
+      light: 'Светлая',
+      medium: 'Средняя',
+      dark: 'Темная',
+    };
+    return labels[level as keyof typeof labels] || level;
+  };
+
+  return (
+    <div className="container">
+      <header className="hero">
+        <h1 className="header">☕ Coffee House</h1>
+        <p className="subtitle">Лучший кофе со всего мира</p>
+      </header>
+
+      <div className="filter">
+        <div className="search-section">
+          <input
+            type="text"
+            placeholder="Поиск кофе..."
+            value={searchText}
+            onInput={handleSearchInput}
+            className="search-input"
+          />
+        </div>
+
+        <div className="checkbox-section">
+          <label>
+            <input
+              type="checkbox"
+              checked={filterInStock}
+              onChange={handleStockChange}
+              className="checkbox-input"
+            />
+            <span>Только в наличии</span>
+          </label>
+        </div>
+
+        <div className="select-section">
+          <select value={roastLevel} onChange={handleRoastChange} className="select-input">
+            <option value="">Все обжарки</option>
+            <option value="light">Светлая</option>
+            <option value="medium">Средняя</option>
+            <option value="dark">Темная</option>
+          </select>
+        </div>
+
+        <button onClick={fetchCoffees} className="refresh-btn" title="Обновить список">
+          🔄
+        </button>
+      </div>
+
+      <div className="apps-container">
+        {loading ? (
+          <p className="no-results">Загрузка...</p>
+        ) : error ? (
+          <div className="error-block">
+            <p>{error}</p>
+            <button onClick={fetchCoffees} className="retry-btn">Повторить</button>
+          </div>
+        ) : (
+          <>
+            <h2>Наш ассортимент ({filteredCoffees.length})</h2>
+            {filteredCoffees.length === 0 ? (
+              <p className="no-results">Кофе не найден</p>
+            ) : (
+              <ul className="apps-list">
+                {filteredCoffees.map((coffee) => (
+                  <li
+                    key={coffee.id}
+                    className={`app-card ${!coffee.inStock ? 'out-of-stock' : ''}`}
+                    onClick={() => setSelectedCoffee(coffee)}
+                  >
+                    <div className="app-image">
+                      <img src={coffee.image} alt={coffee.name} />
+                      {!coffee.inStock && <div className="stock-overlay">Нет в наличии</div>}
+                    </div>
+                    <div className="card-content">
+                      <h3>{coffee.name}</h3>
+                      <p className="origin">📍 {coffee.origin}</p>
+                      <p className="roast-level">🔥 {getRoastLabel(coffee.roastLevel)} обжарка</p>
+                      <div className="rating">
+                        <span className="stars">⭐ {coffee.rating}</span>
+                        <span className="flavor">{coffee.flavor}</span>
+                      </div>
+                      <p className="price">
+                        <span className="price-badge">{coffee.price} ₽</span>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
+        )}
+      </div>
+
+      {selectedCoffee && (
+        <div className="modal" onClick={handleModalClick}>
+          <div className="modal-content">
+            <button className="close-button" onClick={closeModal}>
+              ✕
+            </button>
+            <img src={selectedCoffee.image} alt={selectedCoffee.name} className="modal-image" />
+            <div className="modal-info">
+              <h2>{selectedCoffee.name}</h2>
+              <div className="modal-details">
+                <span className="detail-badge">📍 {selectedCoffee.origin}</span>
+                <span className="detail-badge">🔥 {getRoastLabel(selectedCoffee.roastLevel)}</span>
+                <span className="detail-badge">⭐ {selectedCoffee.rating}</span>
+              </div>
+              <p className="flavor-profile">
+                <strong>Вкусовой профиль:</strong> {selectedCoffee.flavor}
+              </p>
+              <p className="modal-description">{selectedCoffee.description}</p>
+              <div className="modal-footer">
+                <span className="price-large">{selectedCoffee.price} ₽</span>
+                {selectedCoffee.inStock ? (
+                  <button className="btn-install">Добавить в корзину</button>
+                ) : (
+                  <button className="btn-buy" disabled>
+                    Нет в наличии
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

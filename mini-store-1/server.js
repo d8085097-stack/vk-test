@@ -290,13 +290,11 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log('');
-      console.log('╔════════════════════════════════════════╗');
-      console.log('║   🔧 Admin Panel Server Running 🔧     ║');
-      console.log('╠════════════════════════════════════════╣');
-      console.log(`║  📍 http://localhost:${PORT}${' '.repeat(30 - PORT.toString().length)}║`);
-      console.log(`║  📁 DB: ${COFFEE_DB_PATH.substring(0, 28)}${' '.repeat(10)}║`);
-      console.log('║  ✅ Готово к приему запросов!         ║');
-      console.log('╚════════════════════════════════════════╝');
+      
+      console.log('🔧 Admin Panel Server Running 🔧');
+      console.log(`📍 http://localhost:3000/admin`);
+      console.log('✅ Готово к приему запросов!✅');
+      
       console.log('');
       console.log('Доступные эндпоинты:');
       console.log('  GET    /api/coffee           - Получить все кофе');

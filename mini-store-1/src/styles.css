@@ -459,3 +459,42 @@ body {
     grid-template-columns: 1fr;
   }
 }
+/* Кнопка обновления в фильтре */
+.refresh-btn {
+  background: none;
+  border: 1px solid #d1c4a8;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  align-self: center;
+}
+.refresh-btn:hover {
+  background: #f5efe6;
+  transform: rotate(20deg);
+}
+
+/* Блок ошибки загрузки */
+.error-block {
+  text-align: center;
+  padding: 40px 20px;
+  color: #c0392b;
+}
+.error-block p {
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+.retry-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.retry-btn:hover {
+  background: #c0392b;
+}
