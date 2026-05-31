@@ -24,6 +24,7 @@ export default function App() {
   const [selectedCoffee, setSelectedCoffee] = useState<CoffeeCardType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [cart, setCart] = useState<number[]>([]);
 
   const fetchCoffees = useCallback(async () => {
     try {
@@ -74,6 +75,11 @@ export default function App() {
     }
   };
 
+  const handleAddToCart = (e: React.MouseEvent, coffeeId: number): void => {
+    e.stopPropagation();
+    setCart((prev) => [...prev, coffeeId]);
+  };
+
   const getRoastLabel = (level: string): string => {
     const labels = {
       light: 'Светлая',
@@ -86,7 +92,14 @@ export default function App() {
   return (
     <div className="container">
       <header className="hero">
-        <h1 className="header">☕ Coffee House</h1>
+        <div className="hero-top">
+          <h1 className="header">☕ Coffee House</h1>
+          {cart.length > 0 && (
+            <div className="cart-badge">
+              🛒 <span>{cart.length}</span>
+            </div>
+          )}
+        </div>
         <p className="subtitle">Лучший кофе со всего мира</p>
       </header>
 
@@ -156,9 +169,22 @@ export default function App() {
                         <span className="stars">⭐ {coffee.rating}</span>
                         <span className="flavor">{coffee.flavor}</span>
                       </div>
-                      <p className="price">
+                      <div className="price-row">
                         <span className="price-badge">{coffee.price} ₽</span>
-                      </p>
+                        {coffee.inStock ? (
+                          <button
+                            className="btn-cart"
+                            onClick={(e) => handleAddToCart(e, coffee.id)}
+                            title="В корзину"
+                          >
+                            🛒 В корзину
+                          </button>
+                        ) : (
+                          <button className="btn-cart btn-cart-disabled" disabled title="Нет в наличии">
+                            Нет в наличии
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </li>
                 ))}
@@ -189,7 +215,12 @@ export default function App() {
               <div className="modal-footer">
                 <span className="price-large">{selectedCoffee.price} ₽</span>
                 {selectedCoffee.inStock ? (
-                  <button className="btn-install">Добавить в корзину</button>
+                  <button
+                    className="btn-install"
+                    onClick={(e) => handleAddToCart(e, selectedCoffee.id)}
+                  >
+                    Добавить в корзину
+                  </button>
                 ) : (
                   <button className="btn-buy" disabled>
                     Нет в наличии

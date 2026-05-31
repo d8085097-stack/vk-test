@@ -171,6 +171,22 @@ export default function AdminPanel() {
     }
   };
 
+  const handleNormalize = async () => {
+    if (confirm('Пересчитать все ID по порядку (1, 2, 3...)? Это исправит timestamp-ID.')) {
+      try {
+        const res = await fetch(`${API_URL}/coffee/normalize`, { method: 'POST' });
+        if (res.ok) {
+          fetchCoffees();
+          alert('ID успешно пересчитаны!');
+        } else {
+          alert('Ошибка при нормализации ID');
+        }
+      } catch (error) {
+        alert('Не удалось подключиться к серверу');
+      }
+    }
+  };
+
   const getRoastLabel = (level: string): string => {
     const labels = { light: 'Светлая', medium: 'Средняя', dark: 'Темная' };
     return labels[level as keyof typeof labels] || level;
@@ -179,7 +195,7 @@ export default function AdminPanel() {
   return (
     <div className="admin-container">
       <header className="admin-header">
-        <h1>🔧 Админ-панель Coffee House</h1>
+        <h1>🔧 Админ-панель Coffee House🔧</h1>
         <p>Управление базой данных кофе</p>
       </header>
 
@@ -194,6 +210,7 @@ export default function AdminPanel() {
           {jsonView ? '📋 Таблица' : '📄 JSON'}
         </button>
         <button onClick={handleReset} className="btn btn-danger">🔄 Сброс БД</button>
+        <button onClick={handleNormalize} className="btn btn-warning">🔢 Нормализовать ID</button>
       </div>
 
       <div className="stats">
@@ -278,15 +295,15 @@ export default function AdminPanel() {
           <table className="admin-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Фото</th>
-                <th>Название</th>
-                <th>Цена</th>
-                <th>Обжарка</th>
-                <th>Происхождение</th>
-                <th>Рейтинг</th>
-                <th>Наличие</th>
-                <th>Действия</th>
+                <th><h3>ID</h3></th>
+                <th><h3>Фото</h3></th>
+                <th><h3>Название товара</h3></th>
+                <th><h3>Цена</h3></th>
+                <th><h3>Обжарка</h3></th>
+                <th><h3>Происхождение</h3></th>
+                <th><h3>Рейтинг</h3></th>
+                <th><h3>Наличие</h3></th>
+                <th><h3>Действия</h3></th>
               </tr>
             </thead>
             <tbody>

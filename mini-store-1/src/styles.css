@@ -498,3 +498,80 @@ body {
 .retry-btn:hover {
   background: #c0392b;
 }
+/* Price row with cart button */
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 12px 0 0 0;
+}
+
+.btn-cart {
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #6b3e2e 0%, #4a2c1a 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.btn-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(107, 62, 46, 0.35);
+}
+
+.btn-cart:active {
+  transform: translateY(0);
+}
+
+.btn-cart-disabled {
+  background: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+}
+
+.btn-cart-disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Cart badge in hero */
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cart-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #6b3e2e 0%, #4a2c1a 100%);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(107, 62, 46, 0.3);
+}
+
+.cart-badge span {
+  background: #d4a574;
+  color: #2c1810;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+}

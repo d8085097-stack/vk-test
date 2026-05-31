@@ -140,6 +140,22 @@ app.post('/api/coffee/reset', async (req, res) => {
   }
 });
 
+// POST /api/coffee/normalize — пересчитать все ID по порядку (1, 2, 3...)
+app.post('/api/coffee/normalize', async (req, res) => {
+  try {
+    const coffees = await readDB();
+    const normalized = coffees.map((c, index) => ({ ...c, id: index + 1 }));
+    await writeDB(normalized);
+    res.json({
+      success: true,
+      message: `ID пересчитаны для ${normalized.length} записей`,
+      data: normalized,
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Ошибка при нормализации ID' });
+  }
+});
+
 // POST /api/coffee/item — до /:id
 app.post('/api/coffee/item', async (req, res) => {
   try {
@@ -150,8 +166,9 @@ app.post('/api/coffee/item', async (req, res) => {
     }
 
     const coffees = await readDB();
+    const maxId = coffees.length > 0 ? Math.max(...coffees.map(c => c.id)) : 0;
     const newCoffee = {
-      id: Date.now(),
+      id: maxId + 1,
       name,
       price: price || 0,
       inStock: inStock !== undefined ? inStock : true,
