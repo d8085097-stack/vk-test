@@ -121,10 +121,6 @@ export default function App() {
             <option value="dark">Темная</option>
           </select>
         </div>
-
-        <button onClick={fetchCoffees} className="refresh-btn" title="Обновить список">
-          🔄
-        </button>
       </div>
 
       <div className="apps-container">
