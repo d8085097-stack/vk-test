@@ -4,7 +4,7 @@ import TechCard from '../components/TechCard/TechCard';
 import ProjectCard from '../components/ProjectCard/ProjectCard';
 
 export const metadata: Metadata = {
-  title: 'Coffee House — практика в RuStore',
+  title: 'Coffee House',
   description: 'Мини-магазин кофе, созданный за время практики в RuStore',
 };
 
@@ -49,7 +49,7 @@ export default function Home() {
       {/* HERO */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>
-          <span className={styles.heroBadge}>Практика в RuStore · 2026</span>
+          <span className={styles.heroBadge}>Практика в RuStore</span>
           <h1 className={styles.heroTitle}>
             Мини-магазин <br />
             <span className={styles.heroAccent}>Coffee House</span>
