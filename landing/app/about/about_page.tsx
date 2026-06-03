@@ -25,7 +25,7 @@ export default function AboutPage() {
             <li>Разрабатывать REST API на Node.js + Express</li>
             <li>Типизировать проект на TypeScript end-to-end</li>
             <li>Делать SSR с Next.js и понимать разницу с SPA</li>
-            <li>Деплоить на Vercel и проверять Lighthouse-метрики</li>
+            <li>Деплоить на Amvera и проверять Lighthouse-метрики</li>
           </ul>
         </div>
 
