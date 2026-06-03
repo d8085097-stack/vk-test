@@ -5,13 +5,16 @@
   border-radius: 16px;
   padding: 28px;
   overflow: hidden;
-  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
 
 .card:hover {
   transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-lg);
 }
 
 .top {
@@ -27,39 +30,49 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.15);
   padding: 4px 10px;
   border-radius: 20px;
 }
 
 .emoji {
-  font-size: 26px;
+  font-size: 28px;
 }
 
 .title {
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--ink);
   margin-bottom: 10px;
-  letter-spacing: -0.3px;
 }
 
 .desc {
   font-size: 14px;
   color: var(--ink3);
   line-height: 1.65;
-  position: relative;
-  z-index: 1;
+  margin-bottom: 16px;
+}
+
+.link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.card:hover .link {
+  opacity: 1;
 }
 
 .accent {
   position: absolute;
-  bottom: -50px;
-  right: -50px;
-  width: 140px;
-  height: 140px;
+  bottom: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%);
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.15), transparent 70%);
   pointer-events: none;
 }

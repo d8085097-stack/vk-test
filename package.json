@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "npm run dev --prefix mini-store-1",
-    "server": "npm install --prefix mini-store-1 && npm run server --prefix mini-store-1",
+    "dev:all": "concurrently --names \"STORE,SERVER,LANDING\" --prefix-colors \"cyan,yellow,magenta\" \"npm run dev --prefix mini-store-1\" \"npm run server:dev --prefix mini-store-1\" \"npm run dev:3002 --prefix landing\"",
+    "server": "npm run server --prefix mini-store-1",
     "server:dev": "npm run server:dev --prefix mini-store-1",
     "build": "npm run build --prefix mini-store-1",
-    "install:app": "npm install --prefix mini-store-1"
+    "install:all": "npm install --prefix mini-store-1 && npm install --prefix landing"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
   }
 }

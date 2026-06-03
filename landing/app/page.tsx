@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import styles from './page.module.css';
-import TechCard from '@/components/TechCard/TechCard';
-import ProjectCard from '@/components/ProjectCard/ProjectCard';
+import TechCard from '../components/TechCard/TechCard';
+import ProjectCard from '../components/ProjectCard/ProjectCard';
 
 export const metadata: Metadata = {
   title: 'Coffee House — практика в RuStore',
@@ -24,13 +24,15 @@ const projects = [
     title: 'Магазин Coffee House',
     desc: 'Каталог кофе с фильтрами по обжарке, поиском и корзиной. Данные загружаются с бэкенда.',
     color: '#d4a574',
+    href: 'http://localhost:3000',
   },
   {
     tag: 'Админка',
     emoji: '🔧',
     title: 'Панель управления',
     desc: 'CRUD-интерфейс для управления товарами. Тёмная тема, таблица, форма редактирования.',
-    color: '#2563eb',
+    color: '#4f8ef7',
+    href: 'http://localhost:3000/admin',
   },
   {
     tag: 'Лендинг',
