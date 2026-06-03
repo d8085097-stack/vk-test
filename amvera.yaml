@@ -1,0 +1,16 @@
+meta:
+  environment: nodejs
+  toolchain:
+    name: npm
+    version: "20"
+build:
+  skip: false
+  additionalCommands:
+    - npm install --prefix mini-store-1
+  artifacts:
+    "*": /
+run:
+  command: npm run server
+  persistenceMount: /data
+  containerPort: "3001"
+  servicePort: "80"
