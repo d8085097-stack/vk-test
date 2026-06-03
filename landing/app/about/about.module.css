@@ -1,0 +1,85 @@
+.page {
+  padding: 100px 24px;
+  min-height: 80vh;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #d4a574;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: #e8ddd0;
+  margin-bottom: 24px;
+}
+
+.lead {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.7;
+  margin-bottom: 56px;
+}
+
+.block {
+  margin-bottom: 48px;
+}
+
+.block h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e8ddd0;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list li {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.6);
+  padding-left: 20px;
+  position: relative;
+}
+
+.list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #d4a574;
+  font-weight: 700;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.techTag {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(212, 165, 116, 0.1);
+  border: 1px solid rgba(212, 165, 116, 0.2);
+  color: #d4a574;
+}
