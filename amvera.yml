@@ -1,0 +1,11 @@
+meta:
+  environment: nodejs
+  toolVersion: "20"
+build:
+  buildDirectory: .
+  installDependencies: true
+  installCommand: npm install
+  buildCommand: npm run build
+run:
+  runCommand: npm run start
+  port: 3000
