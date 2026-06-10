@@ -26,7 +26,7 @@ export default function RootLayout({
               <Link href="/#about" className={styles.navLink}>О проекте</Link>
               <Link href="/#stack" className={styles.navLink}>Технологии</Link>
               <Link href="/#result" className={styles.navLink}>Результат</Link>
-              <Link href="/about" className={styles.navLink}>Обо мне</Link>
+              
             </nav>
           </div>
         </header>
@@ -36,9 +36,6 @@ export default function RootLayout({
         <footer className={styles.footer}>
           <div className={styles.footerInner}>
             <span>☕ Coffee House</span>
-            <span className={styles.footerDivider}>·</span>
-            <span>Практика в RuStore</span>
-            <span className={styles.footerDivider}>·</span>
             <span>2026</span>
           </div>
         </footer>

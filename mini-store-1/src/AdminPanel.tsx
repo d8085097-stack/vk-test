@@ -195,22 +195,21 @@ export default function AdminPanel() {
   return (
     <div className="admin-container">
       <header className="admin-header">
-        <h1>🔧 Админ-панель Coffee House🔧</h1>
+        <h1>🔧 Админ-панель Coffee House</h1>
         <p>Управление базой данных кофе</p>
       </header>
 
       <div className="admin-actions">
         <button onClick={handleAdd} className="btn btn-primary">➕ Добавить кофе</button>
-        <button onClick={handleExport} className="btn btn-success">📥 Экспорт JSON</button>
-        <label className="btn btn-info">
+        <button onClick={handleExport} className="btn btn-primary">📥 Экспорт JSON</button>
+        <label className="btn btn-primary">
           📤 Импорт JSON
           <input type="file" accept=".json" onChange={handleImport} style={{ display: 'none' }} />
         </label>
-        <button onClick={() => setJsonView(!jsonView)} className="btn btn-secondary">
+        <button onClick={() => setJsonView(!jsonView)} className="btn btn-primary">
           {jsonView ? '📋 Таблица' : '📄 JSON'}
         </button>
-        <button onClick={handleReset} className="btn btn-danger">🔄 Сброс БД</button>
-        <button onClick={handleNormalize} className="btn btn-warning">🔢 Нормализовать ID</button>
+        <button onClick={handleReset} className="btn btn-primary">🔄 Сброс БД</button>
       </div>
 
       <div className="stats">
@@ -279,8 +278,8 @@ export default function AdminPanel() {
             </div>
           </div>
           <div className="form-actions">
-            <button onClick={handleSave} className="btn btn-success">✅ Сохранить</button>
-            <button onClick={handleCancel} className="btn btn-secondary">❌ Отмена</button>
+            <button onClick={handleSave} className="btn btn-primary">✅ Сохранить</button>
+            <button onClick={handleCancel} className="btn btn-primary">❌ Отмена</button>
           </div>
         </div>
       )}
@@ -295,15 +294,15 @@ export default function AdminPanel() {
           <table className="admin-table">
             <thead>
               <tr>
-                <th><h3>ID</h3></th>
-                <th><h3>Фото</h3></th>
-                <th><h3>Название товара</h3></th>
-                <th><h3>Цена</h3></th>
-                <th><h3>Обжарка</h3></th>
-                <th><h3>Происхождение</h3></th>
-                <th><h3>Рейтинг</h3></th>
-                <th><h3>Наличие</h3></th>
-                <th><h3>Действия</h3></th>
+                <th>ID</th>
+                <th>Фото</th>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Обжарка</th>
+                <th>Происхождение</th>
+                <th>Рейтинг</th>
+                <th>Наличие</th>
+                <th>Действия</th>
               </tr>
             </thead>
             <tbody>

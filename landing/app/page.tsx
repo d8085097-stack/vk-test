@@ -1,12 +1,40 @@
 import type { Metadata } from 'next';
 import styles from './page.module.css';
-import TechCard from '../components/TechCard/TechCard';
-import ProjectCard from '../components/ProjectCard/ProjectCard';
+import TechCard from '@/components/TechCard/TechCard';
+import ProjectCard from '@/components/ProjectCard/ProjectCard';
+import CoffeeCard from '@/components/CoffeeCard/CoffeeCard';
 
 export const metadata: Metadata = {
-  title: 'Coffee House',
+  title: 'Coffee House ',
   description: 'Мини-магазин кофе, созданный за время практики в RuStore',
 };
+
+type Coffee = {
+  id: number;
+  name: string;
+  price: number;
+  inStock: boolean;
+  image: string;
+  description: string;
+  rating: number;
+  roastLevel: 'light' | 'medium' | 'dark';
+  origin: string;
+  flavor: string;
+};
+
+// Серверный fetch — выполняется до отправки HTML
+async function getCoffees(): Promise<Coffee[]> {
+  try {
+    const res = await fetch('http://localhost:3001/api/coffee', {
+      // next.js не кэширует — всегда свежие данные
+      cache: 'no-store',
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
 
 const techStack = [
   { icon: '⚛️', name: 'React', desc: 'UI на функциональных компонентах и хуках' },
@@ -43,13 +71,16 @@ const projects = [
   },
 ];
 
-export default function Home() {
+// Страница — async, ждёт данных до рендера
+export default async function Home() {
+  const coffees = await getCoffees();
+
   return (
     <>
       {/* HERO */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>
-          <span className={styles.heroBadge}>Практика в RuStore</span>
+          
           <h1 className={styles.heroTitle}>
             Мини-магазин <br />
             <span className={styles.heroAccent}>Coffee House</span>
@@ -61,7 +92,7 @@ export default function Home() {
           </p>
           <div className={styles.heroActions}>
             <a href="#about" className={styles.btnPrimary}>Узнать больше</a>
-            <a href="#result" className={styles.btnSecondary}>Посмотреть результат</a>
+            <a href="#catalog" className={styles.btnSecondary}>Посмотреть кофе</a>
           </div>
         </div>
         <div className={styles.heroBg} aria-hidden="true">☕</div>
@@ -76,12 +107,12 @@ export default function Home() {
             <div className={styles.aboutCard}>
               <div className={styles.aboutIcon}>🏗️</div>
               <h3>Архитектура</h3>
-              <p>Настроил монорепу с общим пакетом типов и тремя приложениями: витрина, админка и лендинг.</p>
+              <p>Настроил монорепу с тремя приложениями: витрина, админка и лендинг.</p>
             </div>
             <div className={styles.aboutCard}>
               <div className={styles.aboutIcon}>🔌</div>
               <h3>Бэкенд</h3>
-              <p>Написал REST API на Node.js и Express с CRUD-операциями и хранением данных в JSON-файле.</p>
+              <p>Написал REST API на Node.js и Express с CRUD-операциями и хранением в JSON.</p>
             </div>
             <div className={styles.aboutCard}>
               <div className={styles.aboutIcon}>🎨</div>
@@ -91,9 +122,31 @@ export default function Home() {
             <div className={styles.aboutCard}>
               <div className={styles.aboutIcon}>🚀</div>
               <h3>Деплой</h3>
-              <p>Опубликовал проект в интернет и разобрался с SEO: серверный рендеринг на Next.js.</p>
+              <p>Опубликовал проект и разобрался с SSR: лендинг рендерится на сервере.</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* КАТАЛОГ ИЗ API */}
+      <section id="catalog" className={styles.section}>
+        <div className={styles.container}>
+          <span className={styles.sectionTag}>Каталог</span>
+          <h2 className={styles.sectionTitle}>
+            Наш кофе
+            <span className={styles.countBadge}>{coffees.length}</span>
+          </h2>
+          {coffees.length === 0 ? (
+            <p className={styles.noData}>
+              Запустите бэкенд (<code>npm run server:dev</code>), чтобы увидеть товары
+            </p>
+          ) : (
+            <div className={styles.coffeeGrid}>
+              {coffees.map((coffee) => (
+                <CoffeeCard key={coffee.id} coffee={coffee} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
