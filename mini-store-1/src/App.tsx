@@ -1,20 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
+import type { CoffeeCardType } from './types';
 import './styles.css';
 
-type CoffeeCardType = {
-  id: number;
-  name: string;
-  price: number;
-  inStock: boolean;
-  image: string;
-  description: string;
-  rating: number;
-  roastLevel: 'light' | 'medium' | 'dark';
-  origin: string;
-  flavor: string;
-};
-
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+const ROAST_LABELS: Record<string, string> = {
+  light: 'Светлая',
+  medium: 'Средняя',
+  dark: 'Темная',
+};
 
 export default function App() {
   const [searchText, setSearchText] = useState<string>('');
@@ -24,7 +18,7 @@ export default function App() {
   const [selectedCoffee, setSelectedCoffee] = useState<CoffeeCardType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [cart, setCart] = useState<number[]>([]);
+  const [cart, setCart] = useState<Record<number, number>>({});
 
   const fetchCoffees = useCallback(async () => {
     try {
@@ -77,26 +71,19 @@ export default function App() {
 
   const handleAddToCart = (e: React.MouseEvent, coffeeId: number): void => {
     e.stopPropagation();
-    setCart((prev) => [...prev, coffeeId]);
+    setCart((prev) => ({ ...prev, [coffeeId]: (prev[coffeeId] || 0) + 1 }));
   };
 
-  const getRoastLabel = (level: string): string => {
-    const labels = {
-      light: 'Светлая',
-      medium: 'Средняя',
-      dark: 'Темная',
-    };
-    return labels[level as keyof typeof labels] || level;
-  };
+  const totalCartItems = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
 
   return (
     <div className="container">
       <header className="hero">
         <div className="hero-top">
           <h1 className="header">☕ Coffee House</h1>
-          {cart.length > 0 && (
+          {totalCartItems > 0 && (
             <div className="cart-badge">
-              🛒 <span>{cart.length}</span>
+              🛒 <span>{totalCartItems}</span>
             </div>
           )}
         </div>
@@ -164,7 +151,7 @@ export default function App() {
                     <div className="card-content">
                       <h3>{coffee.name}</h3>
                       <p className="origin">📍 {coffee.origin}</p>
-                      <p className="roast-level">🔥 {getRoastLabel(coffee.roastLevel)} обжарка</p>
+                      <p className="roast-level">🔥 {ROAST_LABELS[coffee.roastLevel]} обжарка</p>
                       <div className="rating">
                         <span className="stars">⭐ {coffee.rating}</span>
                         <span className="flavor">{coffee.flavor}</span>
@@ -177,7 +164,7 @@ export default function App() {
                             onClick={(e) => handleAddToCart(e, coffee.id)}
                             title="В корзину"
                           >
-                            🛒 В корзину
+                            🛒 {cart[coffee.id] ? `В корзине: ${cart[coffee.id]}` : 'В корзину'}
                           </button>
                         ) : (
                           <button className="btn-cart btn-cart-disabled" disabled title="Нет в наличии">
@@ -205,7 +192,7 @@ export default function App() {
               <h2>{selectedCoffee.name}</h2>
               <div className="modal-details">
                 <span className="detail-badge">📍 {selectedCoffee.origin}</span>
-                <span className="detail-badge">🔥 {getRoastLabel(selectedCoffee.roastLevel)}</span>
+                <span className="detail-badge">🔥 {ROAST_LABELS[selectedCoffee.roastLevel]}</span>
                 <span className="detail-badge">⭐ {selectedCoffee.rating}</span>
               </div>
               <p className="flavor-profile">
@@ -219,7 +206,9 @@ export default function App() {
                     className="btn-install"
                     onClick={(e) => handleAddToCart(e, selectedCoffee.id)}
                   >
-                    Добавить в корзину
+                    {cart[selectedCoffee.id]
+                      ? `В корзине: ${cart[selectedCoffee.id]} шт.`
+                      : 'Добавить в корзину'}
                   </button>
                 ) : (
                   <button className="btn-buy" disabled>

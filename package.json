@@ -1,13 +1,16 @@
 {
   "name": "vk-test",
   "version": "1.0.0",
+  "workspaces": [
+    "mini-store-1",
+    "landing"
+  ],
   "scripts": {
-    "dev": "npm run dev --prefix mini-store-1",
-    "dev:all": "concurrently --names \"STORE,SERVER,LANDING\" --prefix-colors \"cyan,yellow,magenta\" \"npm run dev --prefix mini-store-1\" \"npm run server:dev --prefix mini-store-1\" \"npm run dev:3002 --prefix landing\"",
-    "server": "npm run server --prefix mini-store-1",
-    "server:dev": "npm run server:dev --prefix mini-store-1",
-    "build": "npm run build --prefix mini-store-1",
-    "install:all": "npm install --prefix mini-store-1 && npm install --prefix landing"
+    "dev": "npm run dev -w mini-store-1",
+    "dev:all": "concurrently --names \"STORE,SERVER,LANDING\" --prefix-colors \"cyan,yellow,magenta\" \"npm run dev -w mini-store-1\" \"npm run server:dev -w mini-store-1\" \"npm run dev:3002 -w landing\"",
+    "server": "npm run server -w mini-store-1",
+    "server:dev": "npm run server:dev -w mini-store-1",
+    "build": "npm run build -w mini-store-1"
   },
   "devDependencies": {
     "concurrently": "^9.0.0"

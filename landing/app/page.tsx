@@ -22,14 +22,17 @@ type Coffee = {
   flavor: string;
 };
 
-// Серверный fetch — выполняется до отправки HTML
 async function getCoffees(): Promise<Coffee[]> {
   try {
     const res = await fetch('http://localhost:3001/api/coffee', {
-      // next.js не кэширует — всегда свежие данные
       cache: 'no-store',
     });
+
     if (!res.ok) return [];
+
+    const contentType = res.headers.get('content-type') ?? '';
+    if (!contentType.includes('application/json')) return [];
+
     return res.json();
   } catch {
     return [];
@@ -71,7 +74,6 @@ const projects = [
   },
 ];
 
-// Страница — async, ждёт данных до рендера
 export default async function Home() {
   const coffees = await getCoffees();
 

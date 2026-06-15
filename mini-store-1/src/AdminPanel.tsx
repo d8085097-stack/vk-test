@@ -1,20 +1,16 @@
 import { useState, useEffect } from 'react';
+import type { CoffeeCardType } from './types';
 import './admin-styles.css';
 
-type CoffeeCardType = {
-  id: number;
-  name: string;
-  price: number;
-  inStock: boolean;
-  image: string;
-  description: string;
-  rating: number;
-  roastLevel: 'light' | 'medium' | 'dark';
-  origin: string;
-  flavor: string;
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+const ROAST_LABELS: Record<string, string> = {
+  light: 'Светлая',
+  medium: 'Средняя',
+  dark: 'Темная',
 };
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+type Notification = { message: string; type: 'success' | 'error' };
 
 export default function AdminPanel() {
   const [coffees, setCoffees] = useState<CoffeeCardType[]>([]);
@@ -22,6 +18,12 @@ export default function AdminPanel() {
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<CoffeeCardType>>({});
   const [jsonView, setJsonView] = useState(false);
+  const [notification, setNotification] = useState<Notification | null>(null);
+
+  const showNotification = (message: string, type: 'success' | 'error' = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   const fetchCoffees = async () => {
     try {
@@ -29,8 +31,8 @@ export default function AdminPanel() {
       if (!res.ok) throw new Error('Ошибка сети');
       const data = await res.json();
       setCoffees(data);
-    } catch (error) {
-      alert('Не удалось загрузить данные с сервера. Проверьте, запущен ли бэкенд!');
+    } catch {
+      showNotification('Не удалось загрузить данные с сервера. Проверьте, запущен ли бэкенд!', 'error');
     }
   };
 
@@ -59,24 +61,24 @@ export default function AdminPanel() {
   };
 
   const handleDelete = async (id: number) => {
-    if (confirm('Удалить этот кофе?')) {
-      try {
-        const res = await fetch(`${API_URL}/coffee/${id}`, { method: 'DELETE' });
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          alert(`Ошибка при удалении: ${errData.error || res.statusText}`);
-          return;
-        }
-        await fetchCoffees();
-      } catch (error) {
-        alert('Не удалось подключиться к серверу. Проверьте, запущен ли бэкенд!');
+    if (!window.confirm('Удалить этот кофе?')) return;
+    try {
+      const res = await fetch(`${API_URL}/coffee/${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        showNotification(`Ошибка при удалении: ${errData.error || res.statusText}`, 'error');
+        return;
       }
+      await fetchCoffees();
+      showNotification('Кофе успешно удалён');
+    } catch {
+      showNotification('Не удалось подключиться к серверу', 'error');
     }
   };
 
   const handleSave = async () => {
     if (!formData.name || !formData.origin || !formData.flavor) {
-      alert('Заполните все обязательные поля!');
+      showNotification('Заполните все обязательные поля!', 'error');
       return;
     }
 
@@ -95,14 +97,15 @@ export default function AdminPanel() {
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        alert(`Ошибка сервера: ${errData.error || res.statusText}`);
+        showNotification(`Ошибка сервера: ${errData.error || res.statusText}`, 'error');
         return;
       }
 
       await fetchCoffees();
       handleCancel();
-    } catch (error) {
-      alert('Не удалось подключиться к серверу. Проверьте, запущен ли бэкенд!');
+      showNotification(isAdding ? 'Кофе успешно добавлен' : 'Кофе успешно обновлён');
+    } catch {
+      showNotification('Не удалось подключиться к серверу', 'error');
     }
   };
 
@@ -142,58 +145,56 @@ export default function AdminPanel() {
             });
             if (res.ok) {
               fetchCoffees();
-              alert('Данные успешно импортированы!');
+              showNotification('Данные успешно импортированы!');
             }
           } else {
-            alert('Неверный формат файла!');
+            showNotification('Неверный формат файла!', 'error');
           }
-        } catch (error) {
-          alert('Ошибка чтения файла!');
+        } catch {
+          showNotification('Ошибка чтения файла!', 'error');
         }
       };
       reader.readAsText(file);
     }
-    // Сбрасываем input, чтобы можно было импортировать тот же файл повторно
     event.target.value = '';
   };
 
   const handleReset = async () => {
-    if (confirm('Сбросить БД к начальным данным?')) {
-      try {
-        const res = await fetch(`${API_URL}/coffee/reset`, { method: 'POST' });
-        if (res.ok) {
-          fetchCoffees();
-          alert('БД сброшена!');
-        }
-      } catch (error) {
-        alert('Не удалось сбросить БД');
+    if (!window.confirm('Сбросить БД к начальным данным?')) return;
+    try {
+      const res = await fetch(`${API_URL}/coffee/reset`, { method: 'POST' });
+      if (res.ok) {
+        fetchCoffees();
+        showNotification('БД сброшена!');
       }
+    } catch {
+      showNotification('Не удалось сбросить БД', 'error');
     }
   };
 
   const handleNormalize = async () => {
-    if (confirm('Пересчитать все ID по порядку (1, 2, 3...)? Это исправит timestamp-ID.')) {
-      try {
-        const res = await fetch(`${API_URL}/coffee/normalize`, { method: 'POST' });
-        if (res.ok) {
-          fetchCoffees();
-          alert('ID успешно пересчитаны!');
-        } else {
-          alert('Ошибка при нормализации ID');
-        }
-      } catch (error) {
-        alert('Не удалось подключиться к серверу');
+    if (!window.confirm('Пересчитать все ID по порядку (1, 2, 3...)?')) return;
+    try {
+      const res = await fetch(`${API_URL}/coffee/normalize`, { method: 'POST' });
+      if (res.ok) {
+        fetchCoffees();
+        showNotification('ID успешно пересчитаны!');
+      } else {
+        showNotification('Ошибка при нормализации ID', 'error');
       }
+    } catch {
+      showNotification('Не удалось подключиться к серверу', 'error');
     }
-  };
-
-  const getRoastLabel = (level: string): string => {
-    const labels = { light: 'Светлая', medium: 'Средняя', dark: 'Темная' };
-    return labels[level as keyof typeof labels] || level;
   };
 
   return (
     <div className="admin-container">
+      {notification && (
+        <div className={`toast toast-${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
+
       <header className="admin-header">
         <h1>🔧 Админ-панель Coffee House</h1>
         <p>Управление базой данных кофе</p>
@@ -210,6 +211,7 @@ export default function AdminPanel() {
           {jsonView ? '📋 Таблица' : '📄 JSON'}
         </button>
         <button onClick={handleReset} className="btn btn-primary">🔄 Сброс БД</button>
+        <button onClick={handleNormalize} className="btn btn-primary">🔢 Норм. ID</button>
       </div>
 
       <div className="stats">
@@ -314,7 +316,7 @@ export default function AdminPanel() {
                     <strong>{coffee.name}</strong><br /><small>{coffee.flavor}</small>
                   </td>
                   <td>{coffee.price} ₽</td>
-                  <td><span className={`badge badge-${coffee.roastLevel}`}>{getRoastLabel(coffee.roastLevel)}</span></td>
+                  <td><span className={`badge badge-${coffee.roastLevel}`}>{ROAST_LABELS[coffee.roastLevel]}</span></td>
                   <td>{coffee.origin}</td>
                   <td>⭐ {coffee.rating}</td>
                   <td><span className={`status ${coffee.inStock ? 'in-stock' : 'out-stock'}`}>{coffee.inStock ? '✓ Есть' : '✗ Нет'}</span></td>

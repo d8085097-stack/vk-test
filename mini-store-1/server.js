@@ -13,7 +13,7 @@ app.set('strict routing', false);
 const PORT = process.env.PORT || 3001;
 const COFFEE_DB_PATH = path.join(__dirname, 'coffee.json');
 
-app.use(cors());
+app.use(cors({ origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173"] }));
 app.use(express.json());
 
 const INITIAL_DATA = [
@@ -309,7 +309,9 @@ const startServer = async () => {
       console.log('');
       
       console.log('🔧 Admin Panel Server Running 🔧');
-      console.log(`📍 http://localhost:3000/admin`);
+      console.log(`📍 Витрина:  http://localhost:3000`);
+      console.log(`📍 Админка:  http://localhost:3000/admin`);
+      console.log(`📍 API:      http://localhost:3001/api/coffee`);
       console.log('✅ Готово к приему запросов!✅');
       
       console.log('');
